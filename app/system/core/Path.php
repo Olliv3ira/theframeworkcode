@@ -5,12 +5,14 @@ namespace app\system\core;
 class Path {
 
     private $path;
-
-    protected function getPath()
+      
+    public static function getPath()
     {        
         if(HMVC)
         {
-            $this->path =  array(
+            $path =  array(
+                'public' => BASEDIR."public/",
+                'template' => BASEDIR."public/templates/",
                 'directory' => BASEDIR."app/modules/",
                 'url' => BASEURL."app/modules/",                
                 'namespace' => "\\app\\modules\\"
@@ -18,14 +20,16 @@ class Path {
         }
         else
         {
-            $this->path =  array(
+            $path =  array(
+                'public' => BASEDIR."public/",
+                'template' => BASEDIR."public/templates/",
                 'directory' => BASEDIR."app/",
                 'url' => BASEURL."app/",
                 'namespace' => "\\app\\"
             );
         }
 
-        return (object) $this->path;
+        return (object) $path;
         
     }
 

@@ -2,20 +2,19 @@
 
 namespace app\system\core;
 
-class Validate extends Path{
+class Validate{
 
-    private $module, $model, $controller, $method, $path, $error, $result;
-
+    private $module, $model, $controller, $method, $error, $result;
+    
     private function moduleValidate($module)
     {   
-        $this->path = parent::getPath();
 
         if($module == '')
         {
             $this->error = "Error: O campo módulo é obrigatório! \n";
         }
 
-        if(!is_dir($this->path->directory.$module))
+        if(!is_dir(Path::getPath()->directory.$module))
         {
             $this->error = "Error: O módulo \"".$module."\" não foi encontrado.";
         }
@@ -35,7 +34,7 @@ class Validate extends Path{
 
     protected function controllerValidate($controller, $module = '')
     {
-        $this->path = parent::getPath();
+        
 
         if(HMVC)
         {           
@@ -43,7 +42,7 @@ class Validate extends Path{
 
             if(!$this->error)
             {
-                if(!file_exists($this->path->directory.$module.'/controllers/'.$controller.'.php'))
+                if(!file_exists(Path::getPath()->directory.$module.'/controllers/'.$controller.'.php'))
                 {
                     $this->error .= "Error: O controller \"".$controller."\" não foi encontrado no módulo \"".$module."\".";
                 }
@@ -52,7 +51,7 @@ class Validate extends Path{
         }
         else
         {
-            if(!file_exists($this->path->directory.'/controllers/'.$controller.'.php'))
+            if(!file_exists(Path::getPath()->directory.'/controllers/'.$controller.'.php'))
             {
                 $this->error .= "Error: O controller \"".$controller."\" não foi encontrado.";
             }
@@ -72,7 +71,6 @@ class Validate extends Path{
    
     protected function modelValidate($model, $module = '')
     {
-        $this->path = parent::getPath();
 
         if(HMVC)
         {           
@@ -80,7 +78,7 @@ class Validate extends Path{
 
             if(!$this->error)
             {
-                if(!file_exists($this->path->directory.$module.'/models/'.$model.'.php'))
+                if(!file_exists(Path::getPath()->directory.$module.'/models/'.$model.'.php'))
                 {
                     $this->error .= "Error: O model \"".$model."\" não foi encontrado no módulo \"".$module."\".";
                 }
@@ -89,7 +87,7 @@ class Validate extends Path{
         }
         else
         {
-            if(!file_exists($this->path->directory.'/models/'.$model.'.php'))
+            if(!file_exists(Path::getPath()->directory.'/models/'.$model.'.php'))
             {
                 $this->error .= "Error: O model \"".$model."\" não foi encontrado.";
             }
@@ -109,7 +107,6 @@ class Validate extends Path{
     
     protected function viewValidate($view, $module = '')
     {        
-        $this->path = parent::getPath();
 
         if(HMVC)
         {
@@ -117,7 +114,7 @@ class Validate extends Path{
 
             if(!$this->error)
             {
-                if(!file_exists($this->path->directory.$module.'/views/'.$view.'.php'))
+                if(!file_exists(Path::getPath()->directory.$module.'/views/'.$view.'.php'))
                 {
                     $this->error = "Error: A view \"".$view."\" não foi encontrada no módulo \"".$module."\".";
                 }
@@ -126,10 +123,29 @@ class Validate extends Path{
         else
         {
 
-            if(!file_exists($this->path->directory.'views/'.$view.'.php'))
+            if(!file_exists(Path::getPath()->directory.'views/'.$view.'.php'))
             {
                 $this->error = "Error: A view \"".$view."\" não foi encontrada.";
             }
+        }
+
+        if($this->error)
+        {
+            $this->result = array('error' => true, 'message' => $this->error);
+        }
+        else
+        {
+            $this->result = array('error' => false, 'message' => '');
+        }
+
+        return $this->result;
+    }
+    
+    protected function templateValidate(String $template)
+    {        
+        if(!file_exists(Path::getPath()->template.$template.'.php'))
+        {
+            $this->error = "Error: O template \"".$template."\" não foi encontrado.";
         }
 
         if($this->error)

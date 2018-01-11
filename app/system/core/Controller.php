@@ -4,36 +4,33 @@ namespace app\system\core;
 
 class Controller extends Route{
 
-    private $module, $model, $view, $error, $result, $links, $helper;
-    protected $request, $path;
+    private $module, $model, $file, $error, $result, $links, $helper;
+    protected $request;
 
     public function __construct()
     {
-        $this->path = parent::getPath();
         $this->request = parent::getRequest();
-        $this->result = array();
-        $this->links = array('css' => '', 'js' => '');        
     }
 
-    private function outputData($view = '')
+    private function outputData($file = '')
     {
         
-        if(!$view)
+        if(!$file)
         {
-            $this->view = $this->outputData;
+            $this->file = $this->outputData;
         }
         else{
-            $this->view = $view;
+            $this->file = $file;
         }
 
-        if(!file_exists($this->view))
+        if(!file_exists($this->file))
         {
             $this->error = "Error: View não encontrada!";  
                       
             die($this->error);            
         }
         else{
-            require_once($this->view);
+            require_once($this->file);
         }
         
     }
@@ -47,14 +44,14 @@ class Controller extends Route{
         {
             if(HMVC)
             {
-                array_push($this->result, '<link rel="stylesheet" href="'.$this->path->url.$this->module.'/views/custom/css/'.$file.'.css" />');   
+                array_push($this->result, '<link rel="stylesheet" href="'.Path::getPath()->url.$this->module.'/views/custom/css/'.$file.'.css" />');   
             }
             else
             {
-                array_push($this->result, '<link rel="stylesheet" href="'.$this->path->url.'/views/custom/css/'.$file.'.css" />');                
+                array_push($this->result, '<link rel="stylesheet" href="'.Path::getPath()->url.'/views/custom/css/'.$file.'.css" />');                
             }
         }
-
+        
         return implode('<br />', $this->result);
     }
 
@@ -67,11 +64,11 @@ class Controller extends Route{
         {
             if(HMVC)
             {
-                array_push($this->result, '<script src="'.$this->path->url.$this->module.'/views/custom/js/'.$file.'.js"></script>');   
+                array_push($this->result, '<script src="'.Path::getPath()->url.$this->module.'/views/custom/js/'.$file.'.js"></script>');   
             }
             else
             {
-                array_push($this->result, '<script src="'.$this->path->url.'/views/custom/js/'.$file.'.js"></script>');                   
+                array_push($this->result, '<script src="'.Path::getPath()->url.'/views/custom/js/'.$file.'.js"></script>');                   
             }
         }
 
@@ -108,11 +105,11 @@ class Controller extends Route{
         {
             if(HMVC)
             {
-                 $this->model = $this->path->namespace.$module."\\models\\".$model;  
+                 $this->model = Path::getPath()->namespace.$module."\\models\\".$model;  
             }
             else
             {
-                 $this->model = $this->path->namespace."models\\".$model;
+                 $this->model = Path::getPath()->namespace."models\\".$model;
             }
 
             $this->result = new $this->model();
@@ -142,26 +139,43 @@ class Controller extends Route{
 
             if(HMVC)
             {
-                $this->outputData = $this->path->directory.$params['module']."/views/".$params['view'].".php";               
+                $this->outputData = Path::getPath()->directory.$params['module']."/views/".$params['view'].".php";               
             }
             else
             {
-                $this->outputData = $this->path->directory."/views/".$params['view'].".php";
-            }
+                $this->outputData = Path::getPath()->directory."/views/".$params['view'].".php";
+            } 
             
-            if(isset($params['links']))
+            
+            if(isset($this->loadData['links']))
             {
-                if(isset($params['links']['css']))
+                if(isset($this->loadData['links']['css']))
                 {
-                    $this->links['css'] = self::getCSS($params['links']['css'], $params['module']);
+                    $this->links['css'] = self::getCSS($this->loadData['links']['css'], $params['module']);
                 }
-                if(isset($params['links']['js']))
+                if(isset($this->loadData['links']['js']))
                 {
-                    $this->links['js'] = self::getJS($params['links']['js'], $params['module']);                
+                    $this->links['js'] = self::getJS($this->loadData['links']['js'], $params['module']);                
                 }
             }
 
-            $this->result = self::outputData(BASEDIR."public/templates/".$params['template'].".php");
+            $this->result = self::outputData(Path::getPath()->template.$params['template'].".php");
+        }   
+        
+        return $this->result;
+    }
+    
+    public function loadTemplate($template)
+    {          
+        $this->error = parent::templateValidate($template)['message'];       
+
+        if($this->error)
+        {
+            $this->result = die($this->error);
+        }
+        else
+        {     
+            $this->result = self::outputData(Path::getPath()->template.$template.".php");
         }   
         
         return $this->result;

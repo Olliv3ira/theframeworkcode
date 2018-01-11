@@ -4,10 +4,10 @@ namespace app\system\core;
 
 class Route extends Validate {
 
-    private $module, $controller, $method, $params = array(), $route = array(), $root_name, $namespace, $result, $Controller, $path;
+    private $module, $controller, $method, $params, $route, $root_name, $namespace, $result, $request;
 
     public function __construct()
-    {
+    {                   
         //retorna os dados da uri em um array
         $this->route = explode('/',$_SERVER['REQUEST_URI']); 
 
@@ -29,26 +29,28 @@ class Route extends Validate {
         
         //recria os índices do array
         $this->route = array_values($this->route);
+        
+        self::setRouteParams($this->route);
     }
-   
-    protected function getRequest()
+        
+    private function setRequest($request)
     {
-        switch($GLOBALS['_SERVER']['REQUEST_METHOD'])
+        switch($request)
         {
             case 'GET':
-                $this->request = $_GET;
+                $this->request['get'] = $_GET;
             break;
 
             case 'POST':
-                $this->request = $_POST;
+                $this->request['post'] = $_POST;
             break;
 
             case 'PUT':
-                $this->request = $_PUT;
+                $this->request['put'] = $_PUT;
             break;
 
             case 'DELETE':
-                $this->request = $_DELETE;
+                $this->request['delete'] = $_DELETE;
             break;
 
             default:
@@ -56,33 +58,41 @@ class Route extends Validate {
             break;
         }
         
-        return $this->request;
     }
 
-    public function run()
+
+    public function getRequest()
+    {   
+        //seta as requisição de acordo com a solicitaçãodo usuário
+        self::setRequest($GLOBALS['_SERVER']['REQUEST_METHOD']);
+        
+        return (object) $this->request;
+    }
+
+    private function setRouteParams(Array $route)
     {
-        for($i = 0; count($this->route) > $i; $i++)
+        for($i = 0; count($route) > $i; $i++)
         {
             if(HMVC)
             {
                 if($i == 0): //retorna o modulo
-                    $this->module = $this->route[$i];
+                    $this->module = $route[$i];
                 elseif($i == 1): //retorna o controller
-                    $this->controller = $this->route[$i];
+                    $this->controller = $route[$i];
                 elseif($i == 2): //retorna o metodo
-                    $this->method = $this->route[$i];
+                    $this->method = $route[$i];
                 elseif($i > 2): //retorna os parâmetros a serem tratados pelo método
-                    array_push($this->params,$this->route[$i]);
+                    array_push($this->params,$route[$i]);
                 endif;                
             }
             else
             {
                 if($i == 0): //retorna o controller
-                    $this->controller = $this->route[$i];
+                    $this->controller = $route[$i];
                 elseif($i == 1): //retorna o metodo
-                    $this->method = $this->route[$i];
+                    $this->method = $route[$i];
                 elseif($i > 1): //retorna os parâmetros a serem tratados pelo método
-                    array_push($this->params,$this->route[$i]);
+                    array_push($this->params,$route[$i]);
                 endif;
             }         
         }
@@ -103,25 +113,26 @@ class Route extends Validate {
                 'method' => ($this->method==''?'index':$this->method),
                 'params' => $this->params
             );
-        }
-                
-        return (object) $this->route;        
+        }               
+               
+    }
+    
+    private function getRouteParams()
+    {
+        return (object) $this->route;
     }
 
-    private function getRoute()
-    {
-        $this->path = parent::getPath();
-        $this->route = self::run();
-
+    private function getController()
+    {           
         if(HMVC)
         {
-            $this->error = parent::controllerValidate($this->route->controller, $this->route->module)['message'];
-            $this->path->namespace .= $this->route->module."\\controllers\\".$this->route->controller;
+            $this->error = parent::controllerValidate(self::getRouteParams()->controller, self::getRouteParams()->module)['message'];
+            $this->namespace = Path::getPath()->namespace.self::getRouteParams()->module."\\controllers\\".self::getRouteParams()->controller;
         }
         else
         {
-            $this->error = parent::controllerValidate($this->route->controller)['message'];
-            $this->path->namespace .= "Controllers\\".$this->route->controller;            
+            $this->error = parent::controllerValidate(self::getRouteParams()->controller)['message'];
+            $this->namespace = Path::getPath()->namespace."Controllers\\".self::getRouteParams()->controller;            
         }
 
         if($this->error)
@@ -130,32 +141,32 @@ class Route extends Validate {
         }
         else
         {
-            $this->result = $this->path->namespace;
+            $this->result = $this->namespace;
         }
 
-        return $this->result;
+        return new $this->result();
     }
+    
 
-    public function runMethod()
+    public function run()
     {
-        $this->Controller = self::getRoute();
 
-        if(method_exists($this->Controller = new $this->Controller(),$this->route->method))
+        if(method_exists(self::getController(),self::getRouteParams()->method))
         {
-            $method = $this->route->method;
+            $method = self::getRouteParams()->method;
 
-            if(!empty($this->route->params))
+            if(!empty(self::getRouteParams()->params))
             {
-                $this->result = $this->Controller->$method($this->route->params);
+                $this->result = self::getController()->$method(self::getRouteParams()->params);
             }
             else
             {
-                $this->result = $this->Controller->$method();                
+                $this->result = self::getController()->$method();                
             }            
             
         }else
         {
-            $this->result = die("Erro: O método \"".$this->route->method."\" não existe.");
+            $this->result = die("Erro: O método \"".self::getRouteParams()->method."\" não existe.");
         }
 
         return $this->result;

@@ -3,4 +3,4 @@
 use app\system\core as Core;
 
 $routes = new Core\Route();
-$routes->runMethod();
+$routes->run();
