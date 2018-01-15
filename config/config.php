@@ -1,11 +1,11 @@
 <?php
 
 $config = array(
-    'root_name' => 'theframeworkcode', //development or production
+    'root_name' => 'theframeworkcode', //dirtórório raiz do projeto
     'default_module' => 'mymodule', // obrigatório para arquitetura HMVC
     'default_controller' => 'mycontroller',
-    'base_dir' => dirname(__DIR__).'/',
-    'base_url' => 'http://localhost/theframeworkcode/'
+    'base_dir' => dirname(__DIR__).DIRECTORY_SEPARATOR,
+    'base_url' => 'http://localhost/theframeworkcode'
 );
 
 //dados de conexão com a base de dados

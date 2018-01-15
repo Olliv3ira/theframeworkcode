@@ -1,77 +1,16 @@
-<?php 
-
-/*
- *---------------------------------------------------------------
- * APPLICATION ENVIRONMENT
- *---------------------------------------------------------------
+<?php
+/**
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
- * This can be set to anything, but default usage is:
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
  *
- *     development
- *     production
- *
- * NOTE: If you change these, also change the error_reporting() code below
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
+ * @since         0.10.0
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-	define('ENVIRONMENT', isset($_SERVER['ENVIRONMENT']) ? $_SERVER['ENVIRONMENT'] : 'development');
 
-/*
- *---------------------------------------------------------------
- * ERROR REPORTING
- *---------------------------------------------------------------
- *
- */
-switch (ENVIRONMENT)
-{
-	case 'development':
-		error_reporting(-1);
-		ini_set('display_errors', 1);
-	break;
-
-	case 'production':
-		ini_set('display_errors', 0);
-		if (version_compare(PHP_VERSION, '5.3', '>='))
-		{
-			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
-		}
-		else
-		{
-			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
-		}
-	break;
-
-	default:
-		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-		echo 'The application environment is not set correctly.';
-		exit(1); // EXIT_ERROR
-}
-
-/*
- *---------------------------------------------------------------
- * APPLICATION ARCHITECTURE
- *---------------------------------------------------------------
- *
- *  * This can be set TRUE or FALSE.
- *
- *     TRUE - to HMVC
- *     FALSE - to MVC
- *
- */
-	define('HMVC', TRUE);
-
-
-//carregamento dos parâmentros de configuração
-require_once(dirname(__FILE__).'/config/config.php');
-
-//carregamento das variáveis globais
-require_once(dirname(__FILE__).'/config/defines.php');
-
-//carregamento do autoload
-require_once(dirname(__FILE__).'/vendor/autoload.php');
-
-//carregamento das classes
-spl_autoload_register(function ($className) {
-    require_once(str_replace('\\','/',dirname(__FILE__).'/'.$className.'.php'));
-});
-
-//carregamento da aplicação
-require_once (dirname(__FILE__).'/public/index.php');
+require 'public' . DIRECTORY_SEPARATOR . 'index.php';

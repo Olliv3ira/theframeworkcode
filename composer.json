@@ -1,4 +1,10 @@
 {
-    "require": {
+    "name": "theframeworkcode",
+    "autoload": {
+        "classmap": [
+            "app/core",
+            "app/src",            
+            "app/helpers"
+        ]
     }
 }
