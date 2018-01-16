@@ -2,7 +2,7 @@
 
 namespace app\src\modules\mymodule\models;
 
-class MyModel extends \app\core\Model{
+class MyModel extends \core\Model{
 
     private $queryResult;
 

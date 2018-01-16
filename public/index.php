@@ -68,5 +68,5 @@ require_once(dirname(__DIR__).'/config/defines.php');
 //carregamento do autoload
 require_once(dirname(__DIR__).'/vendor/autoload.php');
 
-$routes = new app\core\Route();
+$routes = new core\Route();
 $routes->run();

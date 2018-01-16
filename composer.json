@@ -2,7 +2,7 @@
     "name": "theframeworkcode",
     "autoload": {
         "classmap": [
-            "app/core",
+            "core",
             "app/src",            
             "app/helpers"
         ]

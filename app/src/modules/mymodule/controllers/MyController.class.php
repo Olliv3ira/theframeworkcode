@@ -2,7 +2,7 @@
 
 namespace app\src\modules\mymodule\controllers;
 
-class MyController extends \app\core\Controller{
+class MyController extends \core\Controller{
 
     public function index()
     {

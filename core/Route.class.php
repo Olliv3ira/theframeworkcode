@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core;
+namespace core;
 
 class Route extends Validate {
 
