@@ -3,8 +3,7 @@
     "autoload": {
         "classmap": [
             "core",
-            "app/src",            
-            "app/helpers"
+            "app"
         ]
     }
 }

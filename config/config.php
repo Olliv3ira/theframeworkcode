@@ -1,4 +1,4 @@
-<?php
+<?php if(!defined('ENVIRONMENT')) { die('Error: Perfil não definido'); }
 
 $config = array(
     'root_name' => 'theframeworkcode', //dirtórório raiz do projeto

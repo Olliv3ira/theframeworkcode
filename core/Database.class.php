@@ -27,21 +27,25 @@ class Database {
         {                        
             try
             {
-                if(is_null(self::__construct())){
+                
+                if(is_null(self::__construct())) {
                     self::__construct();
                 }
 
                 self::$connection = new \PDO("$this->driver:host=$this->hostname;dbname=$this->database", $this->username, $this->password);
-            }
-            catch(PDOException $error )
-            {
+                
+            } catch(PDOException $error ) {
+                
                 $this->error = 'Erro: '.$error->getMessage();
+                
             }
 
-            if($this->error)
-            {
+            if($this->error) {
+                
                 die($this->error);
+                
             }
+            
         }
 
         return self::$connection;

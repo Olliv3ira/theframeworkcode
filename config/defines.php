@@ -1,4 +1,4 @@
-<?php if(!ENVIRONMENT) { die('Error: Perfil não definido'); }
+<?php if(!defined('ENVIRONMENT')) { die('Error: Perfil não definido'); }
 ######### CONFIGURAÇÃO DE VARIÁVEIS GLOBAIS #########
 
 //define o caminho do diretório raiz

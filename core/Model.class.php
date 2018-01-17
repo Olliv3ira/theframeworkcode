@@ -9,7 +9,9 @@ class Model extends Database
 
     public function __construct()
     {
+        
         $this->PDO = parent::connect();
+        
     }
 
     /**
@@ -24,12 +26,17 @@ class Model extends Database
         $this->queryResul->execute();
 
         if ($this->query_result->rowCount() > 0) {
+            
             $this->result = true;
+            
         } else {
+            
             $this->result = false;
+            
         }
 
         return $this->result;
+        
     }
 
     /**
@@ -41,23 +48,28 @@ class Model extends Database
     {
         
         $this->query = "SELECT ".(is_array($params['fields'])>1?implode(',',$params['fields']):$params['fields'])." FROM ".(is_array($params['tables'])>1?implode(',',$params['tables']):$params['tables'])." WHERE ".(is_array($params['where'])>1?implode(' AND ', $params['where']):$params['where'])." ".(isset($params['others'])?$params['others']:'');
-
         $this->queryResult = $this->PDO->prepare($this->query);
-        if(isset($params['debug']) && $params['debug'] == true)
-        {
+        
+        if(isset($params['debug']) && $params['debug'] == true) {
+            
             return $this->queryResult;
+            
         }
+        
         $this->queryResult->execute();
 
-        if (!$this->queryResult->rowCount()) 
-        {
+        if (!$this->queryResult->rowCount()) {
+            
             $this->result = false;
-        }
-        else{
+            
+        } else {
+            
             $this->result = $this->queryResult->fetchAll(\PDO::FETCH_OBJ);
+            
         }
         
         return $this->result;
+        
     }
 
     /**
@@ -70,19 +82,27 @@ class Model extends Database
         
         $this->query = "UPDATE ".$params['table']." SET ".(is_array($params['fields'])>1?implode(',',$params['fields']):$params['fields'])." WHERE ".(is_array($params['where'])?implode(' AND ', $params['where']):$params['where']);
         $this->queryResul = $this->PDO->prepare($this->query);
-        if(isset($params['debug']) && $params['debug'] == true)
-        {
+        
+        if(isset($params['debug']) && $params['debug'] == true) {
+            
             return $this->queryResult;
+            
         }
+        
         $this->queryResul->execute();
 
         if ($this->query_result->rowCount() > 0) {
+            
             $this->result = true;
+            
         } else {
+            
             $this->result = false;
+            
         }
 
         return $this->result;
+        
     }
 
     protected function delete(Array $params)
@@ -90,19 +110,27 @@ class Model extends Database
         
         $this->query = "DELETE FROM ".$params['table']." WHERE ".(is_array($params['where'])?implode(' AND ', $params['where']):$params['where']);
         $this->queryResul = $this->PDO->prepare($this->query);
-        if(isset($params['debug']) && $params['debug'] == true)
-        {
+        
+        if(isset($params['debug']) && $params['debug'] == true) {
+            
             return $this->queryResult;
+            
         }
+        
         $this->queryResul->execute();
 
         if ($this->query_result->rowCount() > 0) {
+            
             $this->result = true;
+            
         } else {
+            
             $this->result = false;
+            
         }
 
         return $this->result;
+        
     }
 
     protected function query(Array $params)
@@ -110,18 +138,27 @@ class Model extends Database
         
         $this->query = "SELECT ".implode(',', $params['fields'])." FROM ".implode($params['tables']).(isset($params['joins'])?implode(' ', $params['joins']):'')." WHERE ".(is_array($params['where'])?implode(' AND ', $params['where']):$params['where'])." ".$params['others'];
         $this->queryResul = $this->PDO->prepare($this->query);
-        if(isset($params['debug']) && $params['debug'] == true)
-        {
+        
+        if(isset($params['debug']) && $params['debug'] == true) {
+            
             return $this->queryResult;
+            
         }
+        
         $this->queryResul->execute();
 
         if ($this->query_result->rowCount() > 0) {
+            
             $this->result = true;
+            
         } else {
+            
             $this->result = false;
+            
         }
 
         return $this->result;
+        
     }
+    
 }
