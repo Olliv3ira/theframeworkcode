@@ -21,7 +21,7 @@ class Model extends Database
      */
     protected function create(Array $params)
     {        
-        $this->query = "INSERT INTO ".$params['table']." (".(is_array($params['fields'])>1?implode(',',$params['fields']):$params['fields']).") VALUES (".(is_array($params['values'])>1?implode(',',$params['values']):$params['values']).")";
+        $this->query = "INSERT INTO ".$params['table']." (".(is_array($params['fields'])?implode(',',$params['fields']):$params['fields']).") VALUES (".(is_array($params['values'])?implode(',',$params['values']):$params['values']).")";
         $this->queryResul = $this->PDO->prepare($this->query);
         $this->queryResul->execute();
 
@@ -47,7 +47,7 @@ class Model extends Database
     protected function read(Array $params)
     {
         
-        $this->query = "SELECT ".(is_array($params['fields'])>1?implode(',',$params['fields']):$params['fields'])." FROM ".(is_array($params['tables'])>1?implode(',',$params['tables']):$params['tables'])." WHERE ".(is_array($params['where'])>1?implode(' AND ', $params['where']):$params['where'])." ".(isset($params['others'])?$params['others']:'');
+        $this->query = "SELECT ".(is_array($params['fields'])?implode(',',$params['fields']):$params['fields'])." FROM ".(is_array($params['tables'])?implode(',',$params['tables']):$params['tables'])." WHERE ".(is_array($params['where'])?implode(' ', $params['where']):$params['where'])." ".(isset($params['others'])?((is_array($params['others'])?implode(' ',$params['others']):$params['others'])):'');
         $this->queryResult = $this->PDO->prepare($this->query);
         
         if(isset($params['debug']) && $params['debug'] == true) {
@@ -80,7 +80,7 @@ class Model extends Database
     protected function update(Array $params)
     {
         
-        $this->query = "UPDATE ".$params['table']." SET ".(is_array($params['fields'])>1?implode(',',$params['fields']):$params['fields'])." WHERE ".(is_array($params['where'])?implode(' AND ', $params['where']):$params['where']);
+        $this->query = "UPDATE ".$params['table']." SET ".(is_array($params['fields'])>1?implode(',',$params['fields']):$params['fields'])." WHERE ".(is_array($params['where'])?implode(' ', $params['where']):$params['where']);
         $this->queryResul = $this->PDO->prepare($this->query);
         
         if(isset($params['debug']) && $params['debug'] == true) {
@@ -108,7 +108,7 @@ class Model extends Database
     protected function delete(Array $params)
     {
         
-        $this->query = "DELETE FROM ".$params['table']." WHERE ".(is_array($params['where'])?implode(' AND ', $params['where']):$params['where']);
+        $this->query = "DELETE FROM ".$params['table']." WHERE ".(is_array($params['where'])?implode(' ', $params['where']):$params['where']);
         $this->queryResul = $this->PDO->prepare($this->query);
         
         if(isset($params['debug']) && $params['debug'] == true) {
@@ -136,7 +136,7 @@ class Model extends Database
     protected function query(Array $params)
     {
         
-        $this->query = "SELECT ".implode(',', $params['fields'])." FROM ".implode($params['tables']).(isset($params['joins'])?implode(' ', $params['joins']):'')." WHERE ".(is_array($params['where'])?implode(' AND ', $params['where']):$params['where'])." ".$params['others'];
+        $this->query = "SELECT ".implode(',', $params['fields'])." FROM ".implode($params['tables']).(isset($params['joins'])?implode(' ', $params['joins']):'')." WHERE ".(is_array($params['where'])?implode(' ', $params['where']):$params['where'])." ".(isset($params['others'])?((is_array($params['others'])?implode(' ',$params['others']):$params['others'])):'');
         $this->queryResul = $this->PDO->prepare($this->query);
         
         if(isset($params['debug']) && $params['debug'] == true) {
