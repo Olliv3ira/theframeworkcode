@@ -1,9 +1,9 @@
 {
     "name": "theframeworkcode",
     "autoload": {
-        "classmap": [
-            "core",
-            "app"
-        ]
+        "psr-4": {
+            "app\\" : "app",
+            "core\\" : "core"
+        }
     }
 }
