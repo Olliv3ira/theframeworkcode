@@ -2,6 +2,7 @@
 
 namespace core;
 
+use \PDO;
 use \PDOException;
 
 class Database {
@@ -9,7 +10,7 @@ class Database {
     private static $connection;
     private $driver, $hostname, $database, $username, $password, $error = array();
     
-    public function __construct(){
+    private function setParams(){
         
         $this->erro       = false;
         
@@ -23,31 +24,30 @@ class Database {
 
     public function connect()
     {
-        if(is_null(self::$connection))
-        {                        
-            try
-            {
+        if(is_null(self::$connection)) {                        
+            try {
                 
-                if(is_null(self::__construct())) {
-                    self::__construct();
-                }
-
-                self::$connection = new \PDO("$this->driver:host=$this->hostname;dbname=$this->database", $this->username, $this->password);
+                self::setParams();
+                
+                self::$connection = new PDO("$this->driver:host=$this->hostname;dbname=$this->database", "$this->username", "$this->password",array(PDO::ATTR_PERSISTENT => true));
                 
             } catch(PDOException $error ) {
                 
-                $this->error = 'Erro: '.$error->getMessage();
+                Error::setError(array(
+                    'number' => $error->getCode(), 
+                    'message' => $error->getMessage()
+                ));
                 
             }
 
-            if($this->error) {
+            if(Error::countError()) {
                 
-                die($this->error);
+                die(Error::getShowError());
                 
             }
             
         }
-
+        
         return self::$connection;
         
     }

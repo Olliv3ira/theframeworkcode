@@ -213,4 +213,9 @@ class Controller extends Route{
         
     }
     
+    public function redirect($link = '')
+    {          
+        return header("Location: ".BASEURL.$link);
+    }
+    
 }

@@ -9,9 +9,7 @@ class Model extends Database
 
     public function __construct()
     {
-        
-        $this->PDO = parent::connect();
-        
+        $this->PDO = parent::connect();   
     }
 
     /**
@@ -23,6 +21,13 @@ class Model extends Database
     {        
         $this->query = "INSERT INTO ".$params['table']." (".(is_array($params['fields'])?implode(',',$params['fields']):$params['fields']).") VALUES (".(is_array($params['values'])?implode(',',$params['values']):$params['values']).")";
         $this->queryResul = $this->PDO->prepare($this->query);
+        
+        if(isset($params['debug']) && $params['debug'] == true) {
+            
+            return $this->queryResult;
+            
+        }
+        
         $this->queryResul->execute();
 
         if ($this->query_result->rowCount() > 0) {
@@ -58,13 +63,13 @@ class Model extends Database
         
         $this->queryResult->execute();
 
-        if (!$this->queryResult->rowCount()) {
+        if ($this->queryResult->rowCount() > 0) {
             
-            $this->result = false;
+            $this->result = $this->queryResult->fetchAll(\PDO::FETCH_OBJ);            
             
         } else {
             
-            $this->result = $this->queryResult->fetchAll(\PDO::FETCH_OBJ);
+            $this->result = false;
             
         }
         
@@ -149,7 +154,7 @@ class Model extends Database
 
         if ($this->query_result->rowCount() > 0) {
             
-            $this->result = true;
+            $this->result = $this->queryResult->fetchAll(\PDO::FETCH_OBJ);
             
         } else {
             

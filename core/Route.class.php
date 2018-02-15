@@ -4,7 +4,7 @@ namespace core;
 
 class Route extends Validate {
 
-    private $module, $controller, $method, $params = array(), $route = array(), $root_name, $namespace, $result, $request;
+    private $module, $controller, $method, $params = array(), $route = array(), $root_name, $namespace, $result;
 
     public function __construct()
     {                           
@@ -37,43 +37,16 @@ class Route extends Validate {
         //recria os índices do array
         $this->route = array_values($this->route);
         
-        self::setParams($this->route);   
+        self::setParams($this->route);
         
-        //seta as requisição de acordo com a solicitaçãodo usuário
-        self::setRequest($GLOBALS['_SERVER']['REQUEST_METHOD']);
+        //seta as requisição de acordo com a solicitação do usuário
+        Request::setRequest($GLOBALS['_SERVER']['REQUEST_METHOD']);
         
     }
-        
-    private function setRequest($request)
+    
+    public function request()
     {
-        
-        switch($request) {
-            case 'GET':
-                $this->request['get'] = $_GET;
-            break;
-
-            case 'POST':
-                $this->request['post'] = $_POST;
-            break;
-
-            case 'PUT':
-                $this->request['put'] = $_PUT;
-            break;
-
-            case 'DELETE':
-                $this->request['delete'] = $_DELETE;
-            break;
-
-            default:
-                $this->request = array();
-            break;
-        }
-        
-    }
-
-    public function getRequest()
-    {                          
-        return (object) $this->request;
+        return Request::getRequest();
     }
 
     private function setParams(Array $route)
@@ -182,7 +155,7 @@ class Route extends Validate {
         
     }
     
-    private function getMethod(Controller $controller, String $method)
+    private function getAction(Controller $controller, String $method)
     {          
         $this->result = '';
         
@@ -203,7 +176,7 @@ class Route extends Validate {
     public function run()
     {
         
-        if(!$method = self::getMethod(self::getController(),self::getParams()->method)) {
+        if(!$method = self::getAction(self::getController(),self::getParams()->method)) {
             
             $this->result = die("Erro: O método \"".self::getParams()->method."\" não existe.");
             

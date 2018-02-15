@@ -29,16 +29,23 @@ class ComposerStaticInitd62b393add1d5c9621f57616834d446c
     );
 
     public static $classMap = array (
+        'app\\helpers\\FieldValidator' => __DIR__ . '/../..' . '/app/helpers/FieldValidator.class.php',
+        'app\\helpers\\FormGenerator' => __DIR__ . '/../..' . '/app/helpers/FormGenerator.class.php',
         'app\\helpers\\MyHelper' => __DIR__ . '/../..' . '/app/helpers/Text.class.php',
         'app\\libraries\\MyLibrarie' => __DIR__ . '/../..' . '/app/libraries/Teste.class.php',
         'app\\src\\modules\\mymodule\\controllers\\MyController' => __DIR__ . '/../..' . '/app/src/modules/mymodule/controllers/MyController.class.php',
         'app\\src\\modules\\mymodule\\models\\MyModel' => __DIR__ . '/../..' . '/app/src/modules/mymodule/models/MyModel.class.php',
         'core\\Controller' => __DIR__ . '/../..' . '/core/Controller.class.php',
         'core\\Database' => __DIR__ . '/../..' . '/core/Database.class.php',
+        'core\\Error' => __DIR__ . '/../..' . '/core/Error.class.php',
         'core\\Model' => __DIR__ . '/../..' . '/core/Model.class.php',
         'core\\Path' => __DIR__ . '/../..' . '/core/Path.class.php',
+        'core\\Request' => __DIR__ . '/../..' . '/core/Request.class.php',
         'core\\Route' => __DIR__ . '/../..' . '/core/Route.class.php',
+        'core\\Session' => __DIR__ . '/../..' . '/core/Session.class.php',
         'core\\Validate' => __DIR__ . '/../..' . '/core/Validate.class.php',
+        'core\\interfaces\\Form' => __DIR__ . '/../..' . '/core/interfaces/Form.class.php',
+        'core\\interfaces\\Validate' => __DIR__ . '/../..' . '/core/interfaces/Validate.class.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
