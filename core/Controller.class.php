@@ -4,14 +4,7 @@ namespace core;
 
 class Controller extends Route{
 
-    private $module, $model, $file, $error, $result, $links, $helper, $library;
-
-    public function __construct()
-    {
-        
-        parent::__construct();
-        
-    }
+    private $model, $file, $error, $result, $links, $helper, $library;
 
     private function outputData($file = '')
     {
@@ -28,19 +21,17 @@ class Controller extends Route{
 
         if(!file_exists($this->file)) {
             
-            $this->error = "Error: View não encontrada!";  
-                      
-            die($this->error);     
+            Error::setError(array( 'message' => 'View não encontrada!')); 
             
         } else {
             
             require_once($this->file);
             
-        }
+        }        
         
     }
 
-    protected function getCSS(Array $files, $module = '')
+    protected function getCSS(Array $files)
     {
         $this->result = array();
 
@@ -54,7 +45,7 @@ class Controller extends Route{
         
     }
 
-    protected function getJS(Array $files, $module = '')
+    protected function getJS(Array $files)
     {
         $this->result = array();
 
@@ -112,29 +103,27 @@ class Controller extends Route{
 
     public function loadModel(String $model, String $module = '')
     {
-        $this->error = parent::modelValidate($model, $module)['error']?parent::modelValidate($model, $module)['message']:''; 
+        $this->model = parent::modelValidate($model, $module); 
+                    
+        if(Error::countError()) {
             
-        if($this->error) {
-            
-            $this->result = die($this->error);
+            die(Error::getShowError());
             
         } else {
             
             if(HMVC) {
                 
-                 $this->model = Path::getPath()->namespace.$module."\\models\\".parent::modelValidate($model, $module)['model'];
+                 $this->model = Path::getPath()->namespace.$module."\\models\\".$this->model;
                  
             } else {
                 
-                 $this->model = Path::getPath()->namespace."models\\".parent::modelValidate($model, $module)['model'];
+                 $this->model = Path::getPath()->namespace."models\\".$this->model;
                  
             }
                                     
-            $this->result = new $this->model();
+            return (object)(new $this->model());
             
         }
-        
-        return $this->result;
         
     }
 
@@ -143,17 +132,17 @@ class Controller extends Route{
         
         if(HMVC) {
             
-            $this->error = parent::viewValidate($params['view'], $params['module'])['error']?parent::viewValidate($params['view'], $params['module'])['message']:'';
+            parent::viewValidate($params['view'], $params['module']);
             
         } else {
             
-            $this->error = parent::viewValidate($params['view'])['error']?parent::viewValidate($params['view'])['message']:'';
+            parent::viewValidate($params['view']);
             
         }        
 
-        if($this->error) {
+        if(Error::countError()) {
             
-            $this->result = die($this->error);
+            die(Error::getShowError());
             
         } else {
             
@@ -185,31 +174,29 @@ class Controller extends Route{
                 
             }
 
-            $this->result = self::outputData(Path::getPath()->template.$params['template'].".php");
+            self::outputData(Path::getPath()->template.$params['template'].".php");
             
-        }  
-        
-         
-        
-        return $this->result;
+            if(Error::countError()) {
+                die(Error::getShowError());
+            }
+            
+        }
         
     }
     
     public function loadTemplate($template)
     {          
-        $this->error = parent::templateValidate($template)['message'];       
+        parent::templateValidate($template);       
 
-        if($this->error) {
+        if(Error::countError()) {
             
-            $this->result = die($this->error);
+            die(Error::getShowError());
             
         } else {
             
-            $this->result = self::outputData(Path::getPath()->template.$template.".php");
+            return self::outputData(Path::getPath()->template.$template.".php");
             
-        }   
-        
-        return $this->result;
+        }
         
     }
     

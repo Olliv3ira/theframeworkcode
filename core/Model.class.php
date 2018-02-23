@@ -9,7 +9,9 @@ class Model extends Database
 
     public function __construct()
     {
+        
         $this->PDO = parent::connect();   
+        
     }
 
     /**
@@ -28,9 +30,9 @@ class Model extends Database
             
         }
         
-        $this->queryResul->execute();
+        $this->queryResult->execute();
 
-        if ($this->query_result->rowCount() > 0) {
+        if ($this->queryResult->rowCount() > 0) {
             
             $this->result = true;
             
@@ -94,9 +96,9 @@ class Model extends Database
             
         }
         
-        $this->queryResul->execute();
+        $this->queryResult->execute();
 
-        if ($this->query_result->rowCount() > 0) {
+        if ($this->queryResult->rowCount() > 0) {
             
             $this->result = true;
             
@@ -122,9 +124,9 @@ class Model extends Database
             
         }
         
-        $this->queryResul->execute();
+        $this->queryResult->execute();
 
-        if ($this->query_result->rowCount() > 0) {
+        if ($this->queryResult->rowCount() > 0) {
             
             $this->result = true;
             
@@ -150,9 +152,9 @@ class Model extends Database
             
         }
         
-        $this->queryResul->execute();
+        $this->queryResult->execute();
 
-        if ($this->query_result->rowCount() > 0) {
+        if ($this->queryResult->rowCount() > 0) {
             
             $this->result = $this->queryResult->fetchAll(\PDO::FETCH_OBJ);
             

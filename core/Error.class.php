@@ -12,7 +12,7 @@ class Error {
              
     public static function setError(Array $error)
     {        
-        self::$error[] =  'Error '.$error['number'].': '.$error['message'];
+        self::$error[] =  (isset($error['number'])?'Error '.$error['number'].': ':'').$error['message'];
     }
     
     public static function getError()
@@ -22,7 +22,9 @@ class Error {
     
     public static function getShowError()
     {
-        return implode('<br />', self::$error);
+        if(self::$error) {
+            return implode('<br />', self::$error);
+        }
     }
     
     public static function countError()

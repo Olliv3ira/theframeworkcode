@@ -4,13 +4,13 @@ namespace core;
 
 class Path {
 
-    private $path;
+    private static $path;
       
     public static function getPath()
     {        
         if(HMVC) {
             
-            $path =  array(
+            self::$path =  array(
                 'public' => BASEDIR."public".DIRECTORY_SEPARATOR,
                 'template' => BASEDIR."public".DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR,
                 'directory' => BASEDIR."app".DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR,
@@ -19,7 +19,7 @@ class Path {
             
         } else {
             
-            $path =  array(
+            self::$path =  array(
                 'public' => BASEDIR."public".DIRECTORY_SEPARATOR,
                 'template' => BASEDIR."public".DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR,
                 'directory' => BASEDIR."app".DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR,
@@ -28,7 +28,7 @@ class Path {
             
         }
 
-        return (object) $path;
+        return (object) self::$path;
         
     }
 

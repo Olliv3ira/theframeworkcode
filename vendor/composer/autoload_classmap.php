@@ -20,6 +20,7 @@ return array(
     'core\\Request' => $baseDir . '/core/Request.class.php',
     'core\\Route' => $baseDir . '/core/Route.class.php',
     'core\\Session' => $baseDir . '/core/Session.class.php',
+    'core\\URI' => $baseDir . '/core/URI.class.php',
     'core\\Validate' => $baseDir . '/core/Validate.class.php',
     'core\\interfaces\\Form' => $baseDir . '/core/interfaces/Form.class.php',
     'core\\interfaces\\Validate' => $baseDir . '/core/interfaces/Validate.class.php',

@@ -4,32 +4,36 @@ namespace core;
 
 class Request {
 
-    private static $request;    
+    private static $type, $request;    
              
-    public static function setRequest($type)
+    public static function getRequest()
     {        
-        switch($type) {
+        self::$type = $GLOBALS['_SERVER']['REQUEST_METHOD'];
+        
+        switch(self::$type) {
             case 'GET':
-                self::$request[strtolower($type)] = $_GET;
+                self::$request[strtolower(self::$type)] = $_GET;
             break;
 
             case 'POST':
-                self::$request[strtolower($type)] = $_POST;
+                self::$request[strtolower(self::$type)] = $_POST;
             break;
 
             case 'PUT':
-                self::$request[strtolower($type)] = $_PUT;
+                self::$request[strtolower(self::$type)] = $_PUT;
             break;
 
             case 'DELETE':
-                self::$request[strtolower($type)] = $_DELETE;
+                self::$request[strtolower(self::$type)] = $_DELETE;
+            break;
+        
+            default:
+                self::$request = null;
             break;
         }
+    
+        return (object)self::$request;
+        
     }
     
-    public static function getRequest()
-    {
-        return (object)self::$request;
-    }
-
 }

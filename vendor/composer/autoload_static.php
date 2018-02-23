@@ -43,6 +43,7 @@ class ComposerStaticInitd62b393add1d5c9621f57616834d446c
         'core\\Request' => __DIR__ . '/../..' . '/core/Request.class.php',
         'core\\Route' => __DIR__ . '/../..' . '/core/Route.class.php',
         'core\\Session' => __DIR__ . '/../..' . '/core/Session.class.php',
+        'core\\URI' => __DIR__ . '/../..' . '/core/URI.class.php',
         'core\\Validate' => __DIR__ . '/../..' . '/core/Validate.class.php',
         'core\\interfaces\\Form' => __DIR__ . '/../..' . '/core/interfaces/Form.class.php',
         'core\\interfaces\\Validate' => __DIR__ . '/../..' . '/core/interfaces/Validate.class.php',

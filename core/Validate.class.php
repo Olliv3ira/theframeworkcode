@@ -2,6 +2,8 @@
 
 namespace core;
 
+use core\Error;
+
 class Validate{
 
     private $model, $controller, $error, $result;
@@ -27,28 +29,15 @@ class Validate{
 
         if($module == '') {
             
-            $this->error = "Error: O campo módulo é obrigatório! \n";
+            Error::setError(array( 'message' => 'O campo módulo é obrigatório!'));
             
         }
         
         if(!is_dir(Path::getPath()->directory.$module)) {
             
-            $this->error = "Error: O módulo \"".$module."\" não foi encontrado.";
+            Error::setError(array( 'message' => 'O módulo "'.$module.'" não foi encontrado!'));
             
         }
-
-        if($this->error) {
-            
-            $this->result = array('error' => true, 'message' => $this->error);
-        
-            
-        } else {
-            
-            $this->result = array('error' => false, 'message' => '');
-            
-        }
-
-        return $this->result;
         
     }
 
@@ -57,13 +46,13 @@ class Validate{
 
         if(HMVC) {
             
-            $this->error = self::moduleValidate($module)['error']?self::moduleValidate($module)['message']:'';
-
-            if(!$this->error) {
+            self::moduleValidate($module);
+            
+            if(empty(Error::countError())) {
                 
                 if(!($this->controller = self::getFile(Path::getPath()->directory.$module.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR,$controller))) {
                     
-                    $this->error .= "Error: O controller \"".$controller."\" não foi encontrado no módulo \"".$module."\".";
+                    Error::setError(array( 'message' => 'O controller "'.$controller.'" não foi encontrado no módulo "'.$module.'"'));
                     
                 }
                 
@@ -73,19 +62,19 @@ class Validate{
             
             if(!($this->controller = self::getFile(Path::getPath()->directory.'controllers'.DIRECTORY_SEPARATOR,$controller))) {
                 
-                $this->error .= "Error: O controller \"".$controller."\" não foi encontrado no módulo \"".$module."\".";
-                
+                Error::setError(array( 'message' => 'O controller "'.$controller.'" não foi encontrado.'));
+
             }
             
-        }     
+        }         
         
-        if($this->error) {
+        if(Error::countError()) {
             
-            $this->result = array('error' => true, 'message' => $this->error, 'controller' =>'');
+            $this->result = false;
             
         } else {
             
-            $this->result = array('error' => false, 'message' => '', 'controller' => $this->controller);
+            $this->result = $this->controller;
             
         }
 
@@ -98,13 +87,13 @@ class Validate{
 
         if(HMVC) {
             
-            $this->error = self::moduleValidate($module)['error']?self::moduleValidate($module)['message']:'';
-
-            if(!$this->error) {
+            self::moduleValidate($module);
+            
+            if(empty(Error::countError())) {
                 
                 if(!($this->model = self::getFile(Path::getPath()->directory.$module.DIRECTORY_SEPARATOR.'models'.DIRECTORY_SEPARATOR,$model))) {
                     
-                    $this->error .= "Error: O model \"".$model."\" não foi encontrado no módulo \"".$module."\".";
+                    Error::setError(array( 'message' => 'O model "'.$model.'" não foi encontrado no módulo "'.$module.'".'));
                     
                 }
                 
@@ -114,23 +103,17 @@ class Validate{
             
             if(!($this->model = self::getFile(Path::getPath()->directory.'models'.DIRECTORY_SEPARATOR,$model))) {
                 
-                $this->error .= "Error: O model \"".$model."\" não foi encontrado.";
+                Error::setError(array( 'message' => 'Error: O model "'.$model.'" não foi encontrado.'));
                 
             }
             
-        }     
-
-        if($this->error) {
+        }  
+        
+        if(empty(Error::countError())) {
             
-            $this->result = array('error' => true, 'message' => $this->error, 'model' => '');
+            return $this->model;
             
-        } else {
-            
-            $this->result = array('error' => false, 'message' => '', 'model' => $this->model);
-            
-        }
-
-        return $this->result;
+        } 
         
     }
     
@@ -139,13 +122,13 @@ class Validate{
 
         if(HMVC) {
             
-            $this->error = self::moduleValidate($module)['error']?self::moduleValidate($module)['message']:'';
+            self::moduleValidate($module);
 
-            if(!$this->error) {
+            if(empty(Error::countError())) {
                 
                 if(!file_exists(Path::getPath()->directory.$module.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.$view.'.php')) {
                     
-                    $this->error = "Error: A view \"".$view."\" não foi encontrada no módulo \"".$module."\".";
+                    Error::setError(array('message' => 'A view "'.$view.'" não foi encontrada no módulo "'.$module.'".'));
                     
                 }
                 
@@ -155,24 +138,13 @@ class Validate{
 
             if(!file_exists(Path::getPath()->directory.'views'.DIRECTORY_SEPARATOR.$view.'.php')) {
                 
-                $this->error = "Error: A view \"".$view."\" não foi encontrada.";
-                
+                Error::setError(array( 'message' => 'Error: A view "'.$view.'" não foi encontrada.'));
+
             }
             
         }
 
-        if($this->error) {
-            
-            $this->result = array('error' => true, 'message' => $this->error);
-            
-        } else {
-            
-            $this->result = array('error' => false, 'message' => '');
-            
-        }
-
-        return $this->result;
-        
+                
     }
     
     protected function templateValidate(String $template)
@@ -180,21 +152,9 @@ class Validate{
         
         if(!file_exists(Path::getPath()->template.$template.'.php')) {
             
-            $this->error = "Error: O template \"".$template."\" não foi encontrado.";
+            Error::setError(array( 'message' => 'O template "'.$template.'" não foi encontrado.'));
             
         }
-
-        if($this->error) {
-            
-            $this->result = array('error' => true, 'message' => $this->error);
-            
-        } else {
-            
-            $this->result = array('error' => false, 'message' => '');
-            
-        }
-
-        return $this->result;
         
     }
 
