@@ -13,4 +13,4 @@ Este repositório está em desenvolvimento. Para baixar a última versão estáv
 Nessa área você encontrará as informações necessárias para instalar e utilizar o Framework. Acesse aqui nosso [manual de Utilizaço](https://github.com/deolliveira/theframeworkcode/wiki).
 
 # Licença
-Por favor verifique o [contrato de licença](LICENSE).<<<<<<< HEAD
+Por favor verifique o [contrato de licença](LICENSE).
