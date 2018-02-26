@@ -8,12 +8,11 @@ use \PDOException;
 class Database {
 
     private static $connection;
-    private $driver, $hostname, $database, $username, $password, $error = array();
+    private $charset, $driver, $hostname, $database, $username, $password;
     
     private function setParams(){
         
-        $this->erro       = false;
-        
+        $this->charset    = $GLOBALS['db']['default']['charset'];
         $this->driver     = $GLOBALS['db']['default']['driver'];
         $this->hostname   = $GLOBALS['db']['default']['hostname'];
         $this->database   = $GLOBALS['db']['default']['dbname'];
@@ -29,8 +28,8 @@ class Database {
                 
                 self::setParams();
                 
-                self::$connection = new PDO("$this->driver:host=$this->hostname;dbname=$this->database", "$this->username", "$this->password",array(PDO::ATTR_PERSISTENT => true));
-                
+                self::$connection = new PDO("$this->driver:host=$this->hostname;dbname=$this->database;charset=$this->charset", "$this->username", "$this->password",array(PDO::ATTR_PERSISTENT => true));
+
             } catch(PDOException $error ) {
                 
                 Error::setError(array(

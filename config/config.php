@@ -10,6 +10,7 @@ $config = array(
 
 //dados de conexão com a base de dados
 $db['default'] = array(
+    'charset'   => '',
     'driver'   => '',
     'hostname' => '',
     'dbname' => '',
