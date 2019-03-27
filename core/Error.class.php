@@ -4,7 +4,7 @@ namespace core;
 
 class Error {
 
-    private static $error; 
+    private static $error, $count; 
     
     public function __construct() {
         self::$error = array();
@@ -29,7 +29,13 @@ class Error {
     
     public static function countError()
     {
-        return count(self::$error);
+        self::$count = 0;
+
+        if(!is_null(self::$error)){
+            self::$count = count(self::$error);
+        }
+
+        return self::$count;
     }
 
 }
